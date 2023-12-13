@@ -11,6 +11,7 @@ import {
 })
 export class PageListComponent implements OnInit {
   @Input() pages: any = []
+  xss = "<div attr=”*x” onblur=”alert(1)*”>"
 
   constructor() { }
 
