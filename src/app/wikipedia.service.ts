@@ -1,5 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { pluck } from 'rxjs';
+
+interface WikipediaResponse {
+  query: {
+    search: {
+      title: string;
+      snippet: string;
+      pageid: number;
+    }[]
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +24,7 @@ export class WikipediaService {
   ) {}
 
   search(term: string) {
-    
-    return this.http.get(
+    return this.http.get<WikipediaResponse>(
       'https://en.wikipedia.org/w/api.php',
       {
         params: {
@@ -24,7 +35,8 @@ export class WikipediaService {
           srsearch: term,
           origin: '*'  // 
         }
-      }
+      }).pipe(
+      pluck('query', 'search')
     )
   }
 }
